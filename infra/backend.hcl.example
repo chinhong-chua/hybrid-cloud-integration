@@ -1,0 +1,2 @@
+bucket = "replace-with-your-unique-terraform-state-bucket"
+region = "ap-southeast-1"

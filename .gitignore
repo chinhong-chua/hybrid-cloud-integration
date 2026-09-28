@@ -1,0 +1,17 @@
+.tools/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.txt
+*.tfvars
+!*.tfvars.example
+crash.log
+.env
+__pycache__/
+backend.hcl
+tfplan
+tfplan.sha256
+plan.txt
+plan.log
+context.txt
