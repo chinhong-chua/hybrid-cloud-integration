@@ -1,0 +1,13 @@
+--- a/infra/queue.tf
++++ b/infra/queue.tf
+@@ -1,5 +1,5 @@
+-resource "aws_sqs_queue" "input" {
+-  name = "example"
+-  sqs_managed_sse_enabled = true
+-  tags = { Owner = "team-a" }
+-}
++resource "aws_sqs_queue" "input" {
++  name = "example"
++  sqs_managed_sse_enabled = true
++  tags = { Owner = "team-b" }
++}

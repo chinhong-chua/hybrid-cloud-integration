@@ -1,0 +1,11 @@
+--- a/infra/queue.tf
++++ b/infra/queue.tf
+@@ -1,4 +1,4 @@
+-resource "aws_sqs_queue" "input" {
+-  name = "example"
+-  sqs_managed_sse_enabled = true
+-}
++resource "aws_sqs_queue" "input" {
++  name = "example"
++  sqs_managed_sse_enabled = false
++}

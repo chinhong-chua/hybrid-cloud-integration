@@ -1,0 +1,14 @@
+--- /dev/null
++++ b/infra/policy.tf
+@@ -0,0 +1,11 @@
++resource "aws_s3_bucket_policy" "https_only" {
++  policy = jsonencode({
++    Statement = [{
++      Effect = "Deny"
++      Principal = "*"
++      Action = "s3:*"
++      Resource = "*"
++      Condition = { Bool = { "aws:SecureTransport" = "false" } }
++    }]
++  })
++}

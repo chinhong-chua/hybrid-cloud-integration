@@ -1,0 +1,17 @@
+--- a/infra/network.tf
++++ b/infra/network.tf
+@@ -1,7 +1,7 @@
+-resource "aws_network_acl_rule" "api" {
+-  rule_action = "allow"
+-  egress = false
+-  cidr_block = "10.0.0.0/8"
+-  from_port = 443
+-  to_port = 443
+-}
++resource "aws_network_acl_rule" "api" {
++  rule_action = "allow"
++  egress = false
++  cidr_block = "10.1.0.0/16"
++  from_port = 443
++  to_port = 443
++}

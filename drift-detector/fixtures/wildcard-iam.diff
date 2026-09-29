@@ -1,0 +1,13 @@
+--- a/infra/iam.tf
++++ b/infra/iam.tf
+@@ -1,5 +1,5 @@
+-resource "aws_iam_policy" "worker" {
+-  policy = jsonencode({
+-    Statement = [{ Effect = "Allow", Action = ["s3:GetObject"], Resource = "arn:aws:s3:::example/input.csv" }]
+-  })
+-}
++resource "aws_iam_policy" "worker" {
++  policy = jsonencode({
++    Statement = [{ Effect = "Allow", Action = ["s3:*"], Resource = "*" }]
++  })
++}

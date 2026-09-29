@@ -9,6 +9,8 @@
 crash.log
 .env
 __pycache__/
+.venv/
+drift-detector/output/
 backend.hcl
 tfplan
 tfplan.sha256

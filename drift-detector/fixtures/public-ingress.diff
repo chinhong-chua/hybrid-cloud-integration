@@ -1,0 +1,17 @@
+--- a/infra/security_group.tf
++++ b/infra/security_group.tf
+@@ -1,7 +1,7 @@
+-resource "aws_security_group_rule" "allow_api" {
+-  type = "ingress"
+-  from_port = 443
+-  to_port = 443
+-  protocol = "tcp"
+-  cidr_blocks = ["10.0.0.0/8"]
+-}
++resource "aws_security_group_rule" "allow_api" {
++  type = "ingress"
++  from_port = 0
++  to_port = 65535
++  protocol = "tcp"
++  cidr_blocks = ["0.0.0.0/0"]
++}
