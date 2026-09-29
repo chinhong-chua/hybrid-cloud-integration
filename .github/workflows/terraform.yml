@@ -5,6 +5,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      base_ref:
+        description: 'Compare against this reviewed commit/ref (default: previous commit)'
+        required: true
+        default: 'HEAD^'
+        type: string
 
 permissions:
   contents: read
@@ -42,9 +48,37 @@ jobs:
       - name: Static analysis
         run: tflint --recursive --config="${GITHUB_WORKSPACE}/.tflint.hcl"
 
-  # Task 6's source-change risk check will run before this job.
+  risk_check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install source parser
+        run: python3 -m pip install -r drift-detector/requirements.txt
+      - name: Test risk rules
+        run: python3 -m unittest discover -s drift-detector -p 'test_*.py' -v
+      - name: Assess source changes before plan
+        env:
+          BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before || inputs.base_ref || 'HEAD^' }}
+          HEAD_REV: ${{ github.sha }}
+        run: >-
+          python3 drift-detector/detector.py
+          --base "$BASE_REV" --head "$HEAD_REV"
+          --output drift-detector/output/risk-report.json
+      - name: Save risk report even when blocked
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: configuration-risk-${{ github.run_attempt }}
+          path: drift-detector/output/risk-report.json
+          retention-days: 1
+          if-no-files-found: warn
+
   plan:
-    needs: checks
+    needs: [checks, risk_check]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 20
