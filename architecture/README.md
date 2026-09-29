@@ -1,6 +1,6 @@
 # Task 1 — Hybrid integration architecture
 
-Editable diagram: [Task 1 architecture (Draw.io)](task-1-architecture.drawio). Open it in Draw.io to view or edit. Regenerate the file with `node architecture/build-diagram.mjs` from the repository root.
+Editable diagram: [Task 1 architecture (Draw.io)](task-1-architecture.drawio). Open it in Draw.io to view or edit.
 
 ## Scope and assumptions
 
@@ -37,9 +37,3 @@ Store the VM's OAuth secret in the existing on-premise secret store, restrict it
 Propagate a request ID for API calls and a batch ID from uploader through ingestion. Centralise structured logs without tokens or CSV contents. Alert on API errors/latency, missing nightly uploads, oldest queue-message age, rejected files and dead-letter messages; retain an ingestion status per batch.
 
 Outbound HTTPS avoids VPN infrastructure and fits the no-inbound constraint, but exposes an authenticated cloud API endpoint. If policy mandates private connectivity, replace that path with Site-to-Site VPN and an internal ALB, and provide private access to S3. S3/SQS decouples transfer from processing and supports retries, at the cost of asynchronous completion and duplicate-delivery handling. Reuse EKS for the worker to fit existing operational skills. For this assignment, implement only the S3/SQS Terraform slice; EKS, ALB, the identity provider, application code and RDS remain design components.
-
-## References
-
-- [S3 presigned uploads](https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html)
-- [S3 event delivery and destinations](https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.html)
-- [ALB target groups and HTTPS targets](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
