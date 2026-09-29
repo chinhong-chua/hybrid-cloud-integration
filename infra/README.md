@@ -21,6 +21,8 @@ No EKS, API, uploader, CSV worker, database, alarms or identity provider is depl
 
 ## Run locally
 
+The backend now stores state in the separate S3 bucket `hce-dev-446709109300-terraform-state`, at `dev/ingestion.tfstate`, with native locking enabled. Migration from recovered local state completed and the subsequent plan reported no changes. See [Terraform state and team operations](../docs/terraform-state.md) for versioning, updates, recovery, and developer coordination.
+
 For account checks, new-account profiles and SSO/key setup, see [AWS CLI setup](../docs/aws-setup.md).
 
 Use Terraform >= 1.10 and AWS CLI credentials from your normal AWS profile or SSO login. Do not put credentials in `.tfvars`. Commands below run from `infra/` and assume `terraform` is on PATH. The project name defaults to `hybrid-cloud-integration`; override `project_name` in your variable file if needed.
@@ -45,7 +47,7 @@ Deployment is a separate step after reviewing the saved plan and target AWS acco
 terraform apply ingestion.tfplan
 ```
 
-`init` downloads providers and prepares the directory. `plan` previews changes; it does not create infrastructure. `apply` executes the saved plan. Commit `.terraform.lock.hcl` to keep provider selection reproducible. Local state, plans and private variable files are ignored by Git. Local state is for this initial exercise; Task 3 will introduce shared, encrypted remote state with locking before CI deployment.
+`init` downloads providers and prepares the directory. `plan` previews changes; it does not create infrastructure. `apply` executes the saved plan. Commit `.terraform.lock.hcl` to keep provider selection reproducible. Local state backups, plans and private variable files are ignored by Git. Shared S3 state and locking are configured; CI activation still requires the setup described in the state operations guide.
 
 Choose the AWS account/profile deliberately. The deploying identity needs provisioning permissions for these S3, SQS and IAM resources; application policies are not deployment policies. Resources may incur charges depending on account eligibility and usage: having a free-tier account does not guarantee a zero bill.
 
